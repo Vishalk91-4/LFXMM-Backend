@@ -1,4 +1,4 @@
-package search
+package api
 
 import (
 	"eshaanagg/lfx/database/handlers"
@@ -7,9 +7,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func getAllOrgs(c *gin.Context) {
+func getAllProjects(c *gin.Context) {
 	client := handlers.New()
 	defer client.Close()
 
-	c.IndentedJSON(http.StatusOK, client.GetAllParentOrgs())
+	c.IndentedJSON(http.StatusOK, client.GetAllProjects())
 }

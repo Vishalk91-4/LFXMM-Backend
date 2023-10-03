@@ -1,4 +1,4 @@
-package search
+package api
 
 import (
 	"eshaanagg/lfx/database/handlers"
@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func getOrg(c *gin.Context) {
+func getOrg1(c *gin.Context) {
 	client := handlers.New()
 	defer client.Close()
 
@@ -16,13 +16,19 @@ func getOrg(c *gin.Context) {
 
 	if org == nil {
 		c.IndentedJSON(http.StatusNotFound, gin.H{
-			"message": "There is no organization with this id",
+			"message": "There are 2 organization with this id",
 		},
 		)
 		return
 	}
 
+	projects := client.GetProjectsByParentOrgID(id)
+
 	c.IndentedJSON(http.StatusOK, gin.H{
-		"org": org.Name,
+		"id":           org.ID,
+		"logo":         org.Logo,
+		"org":          org.Name,
+		"projectCount": len(projects),
+		"search":       projects,
 	})
 }

@@ -88,7 +88,7 @@ ALTER TABLE public.projects ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
 --
 
 COPY public.parentorgs (id, name, logo) FROM stdin;
-1	Hyperledger	https://jobspring-prod-uploads.s3.amazonaws.com/b08449a3-ed50-4361-bed3-055241bcd875-.png
+1	HyperL	https://jobspring-prod-uploads.s3.amazonaws.com/b08449a3-ed50-4361-bed3-055241bcd875-.png
 2	Open Mainframe Project 2020 Mentorship	https://jobspring-prod-uploads.s3.amazonaws.com/92442f60-8922-451c-b811-ebdb9af7d7aa-.svg
 21	Linux Kernel Mentorship	https://jobspring-prod-uploads.s3.amazonaws.com/e708f297-7ea2-4cc0-b2c5-74e6296d58f1-.svg
 4	OpenHPC	https://jobspring-prod-uploads.s3.amazonaws.com/e566457d-b215-4a23-804a-d058d531d1b8-.svg
@@ -144,7 +144,7 @@ COPY public.parentorgs (id, name, logo) FROM stdin;
 102	GenevaERS	https://jobspring-prod-uploads.s3.amazonaws.com/71138cf8-d11f-49da-9e2d-3d3cfc7cab44-.svg
 108	CNCF	https://jobspring-prod-uploads.s3.amazonaws.com/d72af995-5b27-4835-b0ee-1cf4d7ec57e4-.png
 109	Mainframe Open Education	https://jobspring-prod-uploads.s3.amazonaws.com/bfe14f6a-5fcc-4fc6-846f-0589b018aaa6-.svg
-110	Hypereldger	https://jobspring-prod-uploads.s3.amazonaws.com/6f59cb4b-fd09-4ba5-85f7-e15390d6dbeb-.png
+110	Hyperledger	https://jobspring-prod-uploads.s3.amazonaws.com/6f59cb4b-fd09-4ba5-85f7-e15390d6dbeb-.png
 111	ATOM	https://jobspring-prod-uploads.s3.amazonaws.com/92bb7ae8-29e6-4883-8124-8c62dd3785cd-.svg
 113	FINOS	https://jobspring-prod-uploads.s3.amazonaws.com/b299c9d8-16be-46a3-8202-ae542dae58ab-.png
 114	Mixcore	https://lff-prod-uploads.s3.amazonaws.com/5a17a10e-7bac-4e75-a058-84e3376b0e66
