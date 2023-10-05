@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"database/sql"
 	"eshaanagg/lfx/database"
 	"fmt"
 
@@ -9,7 +8,7 @@ import (
 )
 
 func (client Client) GetAllProjects() []database.ProjectThumbail {
-	rowsRs, err := client.Query("SELECT * FROM projects;")
+	rowsRs, err := client.Query("SELECT id, name, description, programYear, programTerm FROM projects;")
 
 	if err != nil {
 		fmt.Println("[ERROR] GetAllProjects query failed")
@@ -18,14 +17,19 @@ func (client Client) GetAllProjects() []database.ProjectThumbail {
 	}
 	defer rowsRs.Close()
 
-	project1, err := parseResultSetToSlice1(rowsRs)
-	if err != nil {
-		fmt.Println("[ERROR] Can't convert to result set in GetAllProjects function.")
-		fmt.Println(err)
-		return make([]database.ProjectThumbail, 0)
-	}
+	projs := make([]database.ProjectThumbail, 0)
 
-	return project1
+	for rowsRs.Next() {
+		proj2 := database.ProjectThumbail{}
+		err := rowsRs.Scan(&proj2.ID, &proj2.Name, &proj2.Description, &proj2.ProgramYear, &proj2.ProgramTerm)
+		if err != nil {
+			fmt.Println("[ERROR] Can't save to ProjectThumbail struct")
+			return nil
+		}
+		projs = append(projs, proj2)
+	}
+	return projs
+
 }
 
 func (client Client) CreateProject(proj database.Project) *database.Project {
@@ -80,18 +84,6 @@ func (client Client) GetProjectsByParentOrgID(id string) []database.ProjectThumb
 	return projects
 }
 
-func parseResultSetToSlice1(rowsRs *sql.Rows) ([]database.ProjectThumbail, error) {
-	projs := make([]database.ProjectThumbail, 0)
+// func parseResultSetToSlice1(rowsRs *sql.Rows) ([]database.ProjectThumbail, error) {
 
-	for rowsRs.Next() {
-		proj2 := database.ProjectThumbail{}
-		err := rowsRs.Scan(&proj2.ID, &proj2.ProjectURL, &proj2.Name, &proj2.Description, &proj2.ProgramYear, &proj2.ProgramTerm)
-		if err != nil {
-			fmt.Println("[ERROR] Can't save to ProjectThumbail struct")
-			return nil, err
-		}
-		projs = append(projs, proj2)
-	}
-
-	return projs, nil
-}
+// }
