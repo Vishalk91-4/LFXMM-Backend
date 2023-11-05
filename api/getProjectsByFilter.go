@@ -13,14 +13,17 @@ func getProjectsByFilter(c *gin.Context) {
 	filterText := c.DefaultQuery("filterText", "")
 	client := handlers.New()
 	defer client.Close()
-
+	id := c.Param("id")
 	var projects []database.ProjectThumbnail
 	var err error
 
 	if filterText != "" {
-		projects, err = client.GetProjectsByFilter(filterText)
+		projects, err = client.GetProjectsByFilter(id)
 	} else {
-		projects = client.GetProjectsByOrganization("1")
+		c.IndentedJSON(http.StatusNotFound, gin.H{
+			"message": "There is no organization with this ID.",
+		},
+		)
 	}
 
 	if err != nil {

@@ -11,13 +11,13 @@ import (
 /*
  * Get all the project (thumbnails) whose `name` or `description` matches the provided `filterText`
  */
-func (client Client) GetProjectsByFilter(filterText string) ([]database.ProjectThumbnail, error) {
+func (client Client) GetProjectsByFilter(id string) ([]database.ProjectThumbnail, error) {
 	rowsRs, err := client.Query(`
 		SELECT id, name, description, programYear, programTerm 
 		FROM projects 
-		WHERE name LIKE '%$1%' OR description LIKE '%$1$'
+		WHERE id = $1
 		ORDER BY name;
-		`, filterText)
+		`, id)
 
 	if err != nil {
 		fmt.Println("[ERROR] GetProjectsByFilter query failed")
@@ -276,4 +276,43 @@ func parseAsProjectThumbnailSlice(rowsRs *sql.Rows) ([]database.ProjectThumbnail
 	}
 
 	return projects, nil
+}
+
+func (client Client) GetProjectDesc() []database.ProjectDescription {
+
+	rowsRs, err := client.Query(`SELECT id, lfxprojectid, industry, description, repository, skills, amountraised FROM projects`)
+
+	if err != nil {
+		fmt.Println("[ERROR] GetProjectDesc query failed")
+		fmt.Println(err)
+		return make([]database.ProjectDescription, 0)
+	}
+	defer rowsRs.Close()
+
+	projs, err := parseAsProjectDescSlice(rowsRs)
+	if err != nil {
+		fmt.Println("[ERROR] Can't convert to result set in GetPerojectDesc function.")
+		fmt.Println(err)
+		return make([]database.ProjectDescription, 0)
+	}
+
+	return projs
+}
+
+func parseAsProjectDescSlice(rowsRs *sql.Rows) ([]database.ProjectDescription, error) {
+	// Create a placeholder.
+	projdesc := make([]database.ProjectDescription, 0)
+
+	// Loop through the values of rows.
+	for rowsRs.Next() {
+		desc := database.ProjectDescription{}
+		err := rowsRs.Scan(&desc.ProjectID, &desc.LFXId, &desc.Industry, &desc.Description, &desc.Repository, pq.Array(&desc.Skills), &desc.AmountRaised)
+		if err != nil {
+			fmt.Println("[ERROR] Can't save to ProjectDescription struct")
+			return nil, err
+		}
+		projdesc = append(projdesc, desc)
+	}
+
+	return projdesc, nil
 }
